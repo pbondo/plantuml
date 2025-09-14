@@ -1,29 +1,57 @@
-@startuml
+'
+' !include https://raw.githubusercontent.com/pbondo/plantuml/refs/heads/main/database.puml
+'
+@startuml (id=DB)
 
 hide empty methods
 
-!procedure $schema($name, $slug)
+!procedure $schema($name, $slug = 0)
+!if $slug == 0
+  !$slug = $name
+!endif
 package "$name" as $slug <<Rectangle>>
 !endprocedure
 
-!procedure $table($name, $slug)
-entity "<b>$name</b>" as $slug << (T, Orange) table >>
+!procedure $table($name, $slug = 0)
+!if $slug == 0
+  !$slug = $name
+!endif
+entity "<b>$name</b>" as $slug << (T, Orange) >>
 !endprocedure
 
-!procedure $view($name, $slug)
+!procedure $view($name, $slug = 0)
+!if $slug == 0
+  !$slug = $name
+!endif
 entity "<b>$name</b>" as $slug << (V, Aquamarine) view >>
 !endprocedure
 
 !procedure $pk($name)
-<color:#GoldenRod><&key></color> <b>$name</b>
+{field} <color:#GoldenRod><&key></color> <color:#Silver><&media-record></color> <b>$name</b>
 !endprocedure
 
-!procedure $fk($name)
-<color:#Silver><&key></color> $name
+!procedure $fk($name, $notnull = 0)
+!if $notnull == 1
+{field} <color:#Silver><&key></color> <color:#Silver><&media-record></color> $name
+!else
+{field} <color:#Silver><&key></color> <color:transparent><&media-record></color> $name
+!endif
 !endprocedure
 
-!procedure $column($name)
-{field} <color:#White><&media-record></color> $name
+!procedure $column($name, $notnull = 0)
+!if $notnull == 1
+{field} <color:transparent><&key></color> <color:#Silver><&media-record></color> $name
+!else
+{field} <color:transparent><&key></color> <color:transparent><&media-record></color> $name
+!endif
+!endprocedure
+
+!procedure $unique($name, $notnull = 0)
+!if $notnull == 1
+{field} <color:green><&key></color> <color:#Silver><&media-record></color> $name
+!else
+{field} <color:green><&key></color> <color:transparent><&media-record></color> $name
+!endif
 !endprocedure
 
 @enduml
